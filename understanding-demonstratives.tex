@@ -1,0 +1,668 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  man,floatsintext]{apa6}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{english}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\centering\begin{threeparttable}}
+%   {\end{threeparttable}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% Overwrite redefinition of paragraph and subparagraph by the default LaTeX template
+% See https://github.com/crsh/papaja/issues/292
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries\itshape\typesectitle}}
+
+\renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-\z@\relax}%
+  {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+\makeatother
+
+\makeatletter
+\usepackage{etoolbox}
+\patchcmd{\maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
+
+\usepackage{xpatch}
+\makeatletter
+\xapptocmd\appendix
+  {\xapptocmd\section
+    {\addcontentsline{toc}{section}{\appendixname\ifoneappendix\else~\theappendix\fi\\: #1}}
+    {}{\InnerPatchFailed}%
+  }
+{}{\PatchFailed}
+\keywords{demonstratives, language acquisition, deictic reference, pragmatic development, perspective taking\newline\indent Word count: 7393 words in text body}
+\usepackage{lineno}
+
+\linenumbers
+\usepackage{csquotes}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Children's Understanding of Demonstratives: an Experimental Study with German-Speaking Children between Five and Seven Years of Age},
+  pdfauthor={Ramiro Glauer1, Elena Sixtus2, Gregor Kachel3, Jan Lonnemann2, \& Frauke Hildebrandt1},
+  pdflang={en-EN},
+  pdfkeywords={demonstratives, language acquisition, deictic reference, pragmatic development, perspective taking},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Children's Understanding of Demonstratives: an Experimental Study with German-Speaking Children between Five and Seven Years of Age}
+\author{Ramiro Glauer\textsuperscript{1}, Elena Sixtus\textsuperscript{2}, Gregor Kachel\textsuperscript{3}, Jan Lonnemann\textsuperscript{2}, \& Frauke Hildebrandt\textsuperscript{1}}
+\date{}
+
+
+\shorttitle{Understanding Demonstratives}
+
+\authornote{
+
+\emph{Ethics, consent and conflict of interest}: This study confirms with recognized standards (e.g.~the Declaration of Helsinki) and was approved by an internal ethics committee at the University of Potsdam. Informed consent has been obtained from all participants. The authors declare no conflict of interest.
+\emph{Acknowledgments}: We are thankful to XXX for her help in the organization of the study and to XXX, XXX, and XXX for help with data collection. We furthermore thank XXX for the preparation of the videos used in the experiment. Finally, we are very thankful to all parents and children participating in the study.
+
+Correspondence concerning this article should be addressed to Ramiro Glauer, Kiepenheuerallee 5, 14469 Potsdam, Germany. E-mail: \href{mailto:ramiro.glauer@fh-potsdam.de}{\nolinkurl{ramiro.glauer@fh-potsdam.de}}
+
+}
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Social and Educational Sciences Department, University of Applied Sciences Potsdam\\\textsuperscript{2} Empirical Childhood Research, University of Potsdam\\\textsuperscript{3} Leipzig University}
+
+\abstract{%
+Demonstratives (``this''/''that'') express a speaker-relative distance contrast and need to be substituted for each other systematically: depending on their relative position, what one speaker refers to by saying ``this'' another speaker has to refer to by saying ``that''. This substitution aspect of demonstratives poses additional difficulties for learning demonstratives, because it requires recognizing that two speakers have to refer to the same thing with different words, and might be one reason for the reportedly protracted acquisition of demonstratives. In an online study conducted in German, it was investigated whether children in the estimated upper age range of demonstrative acquisition (5 to 7 years) understand demonstratives' substitution aspect with familiar (``dies''/''das'') and novel (``schmi''/''schmu'') demonstratives, and whether they understand novel words (``schmi''/''schmu'') when used non-demonstratively as labels (N = 73; between-subject). Children's accuracy was compared with adult performance (N = 74). The study shows that children between 5 and 7 years of age perform less accurately than adults in all conditions. While adults' performance was highly accurate in all conditions (between 75\% and 92\% correct), children performed below chance in both demonstrative conditions and above chance in the labelling condition. This suggests that children do not understand demonstratives in the presented setup. More detailed analyses of children's response patterns indicate that they instead treat words as mutually exclusive labels in any condition.
+}
+
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+Demonstratives such as \emph{this} and \emph{that} are among the first words children use in their early language production, being often the first noncontent words uttered along with pointing gestures (Clark \& Sengul, 1978; Diessel, 2006; Kita, 2003; but cf. González-Peña, Doherty, \& Guijarro-Fuentes, 2020). Typically, demonstratives occur in pairs marking a distance contrast (``here''/``there'', ``this''/``that''), and are thought to provide a conceptual frame of reference emerging prior to all other frames (Tanz, 1980). Linguistic research on spatial indexicals and psychological research on joint attention suggest that spatial indexicals constitute a universal class of expressions of fundamental significance for cognition and communication (Diessel, 2014; Diessel \& Coventry, 2020). Demonstratives commonly occur together with an attention-directing gesture (e.g., pointing or gaze). They are language universal (Diessel, 2006; Levinson, Cutfield, Dunn, Enfield, \& Meira, 2018; {``Spatial Communication Systems Across Languages Reflect Universal Action Constraints,''} 2023; Wierzbicka, 1996). In exophoric use, they function as spatial deictic expressions to point to a location or an object relative to the deictic center, i.e., the speaker (Bühler, 1934; Coventry, Valdés, Castillo, \& Guijarro-Fuentes, 2008; Diessel, 2014). However, some researchers have proclaimed that demonstratives do not primarily function based on body-centered spatial frames of reference but serve to direct hearers' attention in various ways depending on physical, psychological, and referent-intrinsic factors of the situation (Levinson, 2003; Peeters, Krahmer, \& Maes, 2021; Peeters \& Özyürek, 2016). Diessel and Coventry (2020) convincingly argued that the influence of various factors on a speaker's demonstrative choice is compatible with their universally encoding speaker-centered spatial relations.
+
+Most languages worldwide use two or three terms to mark different distances from the speaker deictically and to refer to the same individual from different perceptual situations (Anderson \& Keenan, 1985; {``Spatial Communication Systems Across Languages Reflect Universal Action Constraints,''} 2023). In German, the language the study was conducted in, there used to be a two-way distinction employing the proximal ``dieser/diese/dies(es)'' , corresponding to ``this'' or ``this one'' in English, and distal ``jener/jene/jenes'' , corresponding to ``that'' or ``that one''.\footnote{In German, demonstratives and articles correspond to grammatical gender, presented here in the order (m/f/n).} However, the distal term (``jener/jene/jenes'') got out of use in everyday exophoric usage. It is now common to mark the distance contrast by adding locative adverbs (``hier'', ``da'', and ``dort'') to the previously proximal demonstrative or to a definite article (``der/die/das''), effectively allowing a three-way distinction.\footnote{``hier'' is proximal, corresponding to ``here'' in English, ``dort'' is distal, corresponding to ``there''. ``da'' is used to mark a medial distance and is commonly translated as ``there'' as well.} But the contrast between a medial ``der/die/das da'' and a distal ``der/die/das dort'' (both roughly corresponding to ``that one there'') appears to be less pronounced than in other three-way languages ({``Spatial Communication Systems Across Languages Reflect Universal Action Constraints,''} 2023). It is unclear whether the former proximal demonstrative (``dieser/diese/dies(es)'', corresponding to ``this'' or ``this one'') and the definite articles (``der/die/das'', corresponding to ``the'') can be used contrastively without adding a locative adverb. While some researchers argue that ``dieser/diese/dies(es)'' might have lost its contrastive meaning because the contrast ``jener/jene/jenes'' is no longer used (Diessel, 1999, 2006, 2013; Himmelmann, 1997), there is no empirical evidence that ``dieser/diese/dies(es)'' is not used contrastively, for instance, contrasting the definite articles ``der/die/das''. In effect, ``dieser/diese/dies(es)'' can be more naturally combined with the proximal locative adverb ``hier'', while ``der/die/das'\,' can be combined naturally with any locative. This suggests that ``dieser/diese/dies(es)'' retain some of their proximal meaning, especially if used in salient contrast to ``der/die/das''. Thus, German may be in a process of diachronic change, i.e.~grammaticalization, developing a new proximal-distal contrast pair with ``dieser/diese/dies(es)'' being used as the proximal form and ``der/die/das'' as the distal form.
+
+Unlike other spatial expressions, demonstratives are very old, probably older than all other functional words (Diessel, 2014). They are the primary source of functional morpheme development and do not themselves derive from other word roots (Diessel, 1999, 2006; Diessel \& Breunesse, 2020).
+
+Despite their linguistic peculiarity and evident centrality to human communication, few studies investigated how children learn demonstratives. Extant studies suggest that adult-like uses of demonstratives are the result of protracted development (González-Peña et al., 2020), with various aspects of their meaning being learned subsequently (De Villiers \& De Villiers, 1974; Webb \& Abrahamson, 1976).
+
+\subsection{Experimental work on the acquisition of demonstratives}\label{experimental-work-on-the-acquisition-of-demonstratives}
+
+Empirical studies on the development of children's comprehension and production of the terms ``this/that'' are relatively sparse. Results from studies with English-speaking children suggest that this development extends over several years. De Villiers and De Villiers (1974) examined English-speaking children ranging in age from 2 to 4 years. Comprehension and production of ``this'' and ``that'' were tested in a hide-and-seek game where the experimenter sat beside or opposite the child. Results revealed that children as young as 3 years of age showed high performance rates („this``: 80\%, „that``: 91\%) in the comprehension task that required translation from the experimenter's perspective to their own perspective. Performance in the production task differed as a function of the experimenter's sitting position; for example, 3-year-old children performed better when the experimenter sat next to them („this``: 75\%, „that``: 80\%) than when the experimenter sat opposite them („this``: 80\%, „that``: 50\%).
+
+Webb and Abrahamson (1976) investigated the acquisition of the terms ``this''/``that'' in English-speaking children of ages 4 and 7 years, also in a comprehension and a production task. Children`s performance in the comprehension task was better for the word „that`` („this``: 66\%, „that``: 73\%), it was better when experimenter and child had the same perspective („this``: 83\%, „that``: 68\%) than when they faced each other („this``: 48\%, „that``: 78\%), and it was better for the 7-year-old children („this``: 73\%, „that``: 78\%) compared to the 4-year-old children („this``: 58\%, „that``: 67\%).
+
+Clark and Sengul (1978) presented English-speaking children aged 2 to 4 years with a game in which they had to decide which of two toys to move, testing their comprehension of demonstratives. The experimenter sat beside the child or on the opposite side of the table, facing the child. Children's performance increased with age (e.g., 3-year-olds: „this``: 56\%, „that``: 51\%; 4-year-olds: „this``: 75\%, „that``: 76\%), and children were more likely to answer correctly to the word „this`` with the experimenter next to them („this``: 83\%, „that``: 42\%), but were more frequently correct on the word „that`` with the experimenter facing them („this``: 51\%, „that``: 85\%). Only 5 of 36 children appeared to have a complete understanding of the terms „this`` and „that``.
+
+In a recent study by González-Peña, Coventry, Bayliss, and Doherty (2022), the production of the terms ``this one/that one'' was investigated in English-speaking children ages 7 and 11. In two experiments, children were asked to tell a puppet,supposedly understanding only the words ``this one'' and ``that one'', which of two identical-looking dinosaurs had ``jumped'' from the side of the table to a position along a wooden bar extending from the child. The dinosaurs were distinguished by differently colored stickers, and before the experiments, children could choose one of the dinosaurs which they could keep afterwards. In the first experiment, the 11-year-old children used the term ``this'' more often for positions that were closer to them and the term ``that'' more often for positions that were further away from them. This was not the case for the 7-year-old children. In addition, there was a trend across both age groups to use the term „this`` more often for the chosen dinosaur, irrespective of its distance from the child. In a second experiment, the stimulus value was increased by combining the dinosaur figure with a token of economic value. This resulted in a stronger effect of ``ownership'' compared to the first experiment (the term ``this'' was used significantly more often for the chosen dinosaur). Moreover, not only the 11-year-old children but also the 7-year-old children used the term ``this'' more frequently for positions closer to them and the term ``that'' more frequently for positions farther away from them. According to González-Peña et al. (2022), these results suggest that distinctions in demonstrative production emerge around the age of 7, assuming sampling differences as the reason for the variation between experiments.
+
+In sum, the results of studies exploring the development of comprehension and production of the terms ``this/that'' in English-speaking children are inconclusive. English-speaking children may begin to distinguish between these terms in comprehension and production as early as age 3 (De Villiers \& De Villiers, 1974), although other findings suggest that this does not occur until age 7 ((González-Peña et al., 2020; Webb \& Abrahamson, 1976).
+
+Findings from studies with children speaking languages other than English also do not allow to draw clear conclusions regarding the development of comprehension and production of the terms analogous to ``this/that''. Comprehension of such terms was found to be above chance in 5-year-old Mandarin-speaking children, even when the terms were uttered by a speaker with a different perspective (Chu \& Minai, 2018). Regarding production, Turkish-speaking children have been reported to acquire the basic distinction between specific terms for objects that are close and far from themselves at age 4 (Küntay \& Özyürek, 2006). In contrast, this competence has been reported in 6- to 8-year-old but not in 3- to 5-year-old Spanish-speaking children (Shin \& Morford, 2020).
+
+\subsection{Theoretical Considerations}\label{theoretical-considerations}
+
+Based on a detailed review of extant findings of adults' use of demonstratives, Peeters et al. (2021) argued that speakers' choice of demonstrative form is not primarily influenced by speaker-centric distance to the referent. Whether a proximal or a distal demonstrative is used may, for instance, be influenced by hearers' or the dyad's distance to the referent, by its visibility, assumed relevance, possession, or other non-spatial factors. Moreover, there might be non-contrastive uses of demonstratives. The variability of speakers' choice of demonstrative form is taken to suggest that speaker-centric distance is not central to demonstratives' meaning. However, while the actual choice of a demonstrative and its interpretation appear to depend on various semantic and pragmatic factors, {``Spatial Communication Systems Across Languages Reflect Universal Action Constraints''} (2023) demonstrated that the speaker-centric distance contrast is a language-universal meaning aspect of demonstratives. And while they found hearer-centric uses of demonstratives in their study, these were only found for some languages and remained comparably rare. It is safe to conclude that a referent's distance to the speaker is a central aspect of demonstratives in exophoric usage even if the choice of demonstrative form may also be influenced by other factors in actual conversations such that what counts as near may, for instance, include the shared space between conversation partners or a larger region around the speaker or the speaker-hearer dyad (Bühler, 1934; Diessel, 2014).
+
+From the fact that demonstratives mark a relative distance contrast to the speaker it follows that speakers have to use different words to refer to the same thing from different perspectives and may have to refer to different things using the same word from different perspectives. What one speaker refers to by saying ``this'' or ``here'', another speaker, standing some distance away, must refer to by saying ``that'' or ``there''---equally in the case of just one speaker who changes her position. If used in a distance-contrasting way, demonstratives need to be \emph{substituted} for each other to refer to the same thing from different positions.
+
+Consider what is generally involved in learning new words and what is peculiar about learning demonstratives. While content words can be learned by associating words with featurally discriminable aspects of the environment, demonstratives require sensitivity to a higher-level similarity. Because anything can be this or that, the referents of ``this'' and ``that'' have nothing in common except for their relative distance to whoever is speaking. Moreover, note that language learners need not know that two uses of ``this'' and ``that'' refer to the same thing. For one, as argued by Hildebrandt and Glauer (2023) and Hildebrandt, Glauer, and Moore (2023), children might lack the required ability to individuate objects before being able to use demonstratives adequately, and only through learning demonstratives an abstract frame of reference for object individuation is acquired. For another, even if children do individuate objects early on (Stavans, Lin, Wu, \& Baillargeon, 2019; Van de Walle, Carey, \& Prevor, 2000; Xu \& Carey, 1996), they might have difficulties relating two uses of ``this'' and ``that''. Arguably, this should be quite common in actual conversations where several objects can be at the right relative distances from speakers. Moreover, children (as well as adults) have a bias towards using one word per object when encountering novel words with unknown meaning (Justin Halberda, 2003; J. Halberda, 2006; Markman, Wasow, \& Hansen, 2003; mutual exclusivity bias, Merriman, Bowman, \& MacWhinney, 1989).
+
+Correspondingly, identifying the right speaker-relative distances is not sufficient for bringing together uses of ``this'' and ``that'' referring to the same thing from different positions. In addition to the relative distance contrast, learners must relate uses of demonstratives adequately. Such related uses of demonstratives differ from corresponding uses of content words. For instance, one speaker might ask someone: ``Could you pass me that apple, please?'' To which the other person might respond: ``This one?'' And the answer would be: ``Yes, that one.'' Here, we have an affirmative behaviour following subsequent uses of different demonstratives. A similar pattern of uses of different words can be viable for content words, such as when one speaker uses a superordinate category word or a description (e.g., ``long-furred, purring predator'') in response to a request involving some base category word (e.g., ``cat''). But in the case of demonstratives, it is mandatory if used contrastively either to use the same or another demonstrative, depending on relative positions. Demonstratives form a closed class of words which have to be \emph{substituted} in characteristic ways. That is, to say the same thing, speakers at different positions must replace one demonstrative by another.
+
+The importance of demonstrative substitution can easily be overlooked, because it appears to be a direct consequence of demonstratives' relative-distance contrast. Once speakers have focused on a shared object of attention, demonstrative substitution follows from each speakers' choosing demonstratives according to the focused-on object's distance. However, as argued by Hildebrandt and Glauer (2023), assuming that speakers' focus of attention can be conceptualised as \emph{the same object} at the outset of learning demonstratives underestimates the complexity of proper object individuation which requires sensitivity to objects' individuation criteria. Object individuation requires unequivocally distinguishing all particular objects. Because there might be two objects that are totally alike in all their discearnible features, such as two industrially produced screws of the same make, object individuation requires more than perfect similarity. Ultimately, what distinguishes each object is its spatial position relative to other objects at the same time. Thus, for ordinary material objects, the individuation criteria are spatiotemporal, and the ability to individuate objects requires ``anchoring'' them spatially and temporally in an adult like way, i.e., irrespective of sorting them by similarity. By learning a substitutional system of demonstratives, an intersubjectively shared, abstract frame of reference is acquired that goes beyond the distinction of what is reachable or non-reachable for someone by combining several speakers' perspectives within an intersubjective coordinate system. Such a coordinate system can be used to localise, and thereby individuate, proper objects (Hildebrandt \& Glauer, 2023; Hildebrandt et al., 2023; Tugendhat, 1976, 2016).
+
+In sum, spatial indexicals comprise the following decisive semantic features: they are context-sensitive in that their referents change from situation to situation. They mark a distance contrast relative to the speaker. And they must be substituted for each other to refer to the selfsame object from different positions. To our knowledge, the substitution aspect has not yet been investigated. Test conditions involving one or more speakers talking about the same thing from different positions would allow probing children's understanding of the substitution aspect of spatial indexicals' meaning.
+
+\subsection{This study}\label{this-study}
+
+The study was conducted in German employing the terms ``dies'' and ``das'' without adding the locative adverb. The speaker could be referring to one of two alike-looking objects at different distances on a table, making a two-way contrast salient - even if the contrastive meaning of the German demonstratives, when used individually, is not as strong as in other languages, for instance, of ``this'' and ``that'' in English. ''Dies'' and ``das'' were the natural choice because we were aiming to focus on the objects referred to, not their location.
+
+To test not only the substitution knowledge of children incorporated in the concrete terms ``dies'' and ``das'' but also to determine whether children can employ a systematic rule-based substitution that goes beyond the context of familiar words, we chose to integrate a pseudo-word condition. Pseudo-words such as ``Schmi'', i.e., phonologically viable forms that are not in the lexicon of a given language, are used extensively in linguistic and psycholinguistic experiments. Children who encounter pseudo-words cannot rely on their existing vocabulary or experience with these words. By comparing children's performance with pseudo-words and actual words, we aim to conclude whether children possess a flexible understanding of the semantic substitution structures of indexicals independent of specific words.
+
+As target objects, we have used two identical-looking balls placed symmetrically on a table with no further distinguishing features in the background to ensure that participants make responses based on the objects' distances to the speaker, not based on an object's salience or preferences for an object's or its surrounding features. The study employs the one-speaker version of demonstrative substitution. That is, in the whole experiment, one speaker referred to the target objects from different positions. The study was restricted to one-speaker substitution because participants might assume that two speakers use the same words with slightly different meanings, presenting the additional difficulty of having to decide whether they employ the same or alternative meanings.
+
+As a control, we have devised a condition in which children are not forced to include the speaker's spatial perspective and which does not require the ability to substitute expressions. This condition resembles a labelling or naming condition in which a word such as ``cat'' has to be associated with an object kind. However, because no external distinguishing features are apparent in the objects to be labelled, the task is more complex than ordinary labelling. It requires considering objects' position and resembles tasks involving relational properties (e.g., grandma's favourite ball) or dispositional properties (e.g., magnetism). Such tasks are referred to here as \emph{complex labelling tasks}.
+
+Studies show that the development of comprehension and production of the terms ``this/that'' occurs primarily between 3 and 7 years of age (see above). Since substitution is a demanding semantic feature, we want to investigate whether children in the upper range of the age window are capable of demonstrative comprehension, including substitution. In addition, we have included adults to estimate proficient performance in the presented tasks.
+
+Finally, if not employing demonstratives' meaning rules, children might follow different response strategies. Children might select responses randomly. However, there is evidence in the literature suggesting that children prefer selecting objects closer to the speaker (Clark \& Sengul, 1978). Moreover, it was argued that children have a mutual exclusivity bias when learning new content words (Justin Halberda, 2003; J. Halberda, 2006; Markman et al., 2003; Merriman et al., 1989). This bias might likewise be effective when learning demonstratives.
+
+\subsection{Hypotheses}\label{hypotheses}
+
+Consistent with existing studies of demonstrative comprehension and following from the complexity of demonstratives' substitution aspect, we assumed that children (5-7) do not fully master the usage rules of ordinary nor pseudo-word demonstratives. Moreover, we assume that children of that age have remaining difficulties with complex labelling tasks. Thus, we hypothesise that children perform significantly less accurately than adults in all conditions (H1).
+
+Children in the upper acquisition age range should partly understand demonstratives' meaning. They might, nonetheless, lack a flexible understanding of the semantic substitution structures of demonstratives. Understanding pseudo-word demonstratives, independent of already learned words, would thus be more difficult for children than understanding demonstratives. Therefore, we assume that children perform significantly more accurately in the demonstrative condition than in the pseudo-word demonstrative condition (H2).
+
+Moreover, the complex labelling condition does not require a substitution rule. Therefore, we hypothesise that children perform significantly more accurately in the complex labelling condition than in both other conditions (H3).
+
+Concerning children's response strategies, three hypotheses were formulated post-hoc and tested in an exploratory analysis. First, children might select responses randomly (R1, random choice). Second, children might tend to select the ball closer to the speaker (R2, proximity bias). Third, for the second request in a trial, children might tend to select the ball not selected in their first response (R3, mutual exclusivity bias).
+
+\section{Methods}\label{methods}
+
+\subsection{Participants}\label{participants}
+
+A total of 73 children and 74 adults were tested in a 2x3 between-subjects design (see Table 1). The total sample size was based on standard practices in the field. With this sample size, G*Power sensitivity analyses indicated that \emph{t}-tests testing our three main hypotheses would be able to detect large effect sizes of Cohen's d \(\geq\) .87 (H1: three one-tailed \emph{t}-tests with Bonferroni-corrected alpha-level of .05/3, power of 80\%, group sizes of 24 and 25 participants each), Cohen's d \(\geq\) .72 (H2: one one-tailed \emph{t}-test with an alpha level of .05, power of 80\%, and group sizes of 24 and 25 participants), and Cohen's d \(\geq\) .82 (H3: two one-tailed \emph{t}-tests with Bonferroni-corrected alpha-level of .05/2, power of 80\%, and group sizes of 24 and 25 participants). Children were recruited online, in Potsdam, a medium-sized Central European city, or in a test centre in Blossin/Heidesee (Brandenburg, Germany), being visited by kindergarten groups from Berlin and the State of Brandenburg. Children in Potsdam were contacted via a database of participants for child development studies to which their parents had voluntarily signed up. Appointments were made based on parents' and children's availability. The socio-economic status of families was not recorded. Still, the test center is visited by children with diverse backgrounds, generally representing the ethnic and socio-economic range of a suburban-to-rural region in Central Europe. All studies described below were reviewed and approved by an internal ethics committee at the University of Potsdam. Adult participants were recruited online. Data collection took place from March to December 2021. In addition, 11 children (6 female) were tested but not submitted to the final sample for not fitting into the planned age range.
+
+\begin{table}[ht]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:demtab}Demographics - Age Categories by Condition}
+
+\begin{tabular}{llllllll}
+\toprule
+Age & \multicolumn{1}{c}{Condition} & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{female} & \multicolumn{1}{c}{M age} & \multicolumn{1}{c}{Min age} & \multicolumn{1}{c}{Max age} & \multicolumn{1}{c}{SD age}\\
+\midrule
+Adult & Complex Labeling & 25 & 19 & 34.80 & 20 & 62 & 11.66\\
+Adult & Demonstrative & 24 & 14 & 32.12 & 21 & 70 & 12.33\\
+Adult & Pseudo-word Demonstrative & 25 & 19 & 33.72 & 19 & 61 & 12.23\\
+Child & Complex Labeling & 24 & 13 & 5.50 & 5 & 7 & 0.59\\
+Child & Demonstrative & 25 & 9 & 5.56 & 5 & 7 & 0.65\\
+Child & Pseudo-word Demonstrative & 24 & 14 & 5.38 & 5 & 6 & 0.49\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} The table shows per condition and age group the number of participants (N), the number of female participants (female), the mean age (M age), the minimum and maximum age (Min age and Max age), and the standard deviation of participants' age (SD age).}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+\subsection{Procedure and Setup}\label{procedure-and-setup}
+
+Following the rules at the University of Applied Sciences Potsdam during the SARS-CoV-2 pandemic, the study was conceptualized as an online experiment. The study was advertized through social media channels and email lists. Parents could either follow a link and let their children participate in the experiment whenever convenient (N = 6), or they were asked to make an appointment for a video call during which an experimenter assisted in the experiment (N = 5). Due to difficulties in the online acquisition of participants, the study was conducted with mobile devices in a test center in Blossin/Heidesee (Brandenburg, Germany) when regulations allowed face-to-face contact with children (N = 60). In the online version, the experiment began with a written introduction for parents, explaining how the experiment was conducted and expressing that children could break off participation at any time. In the face-to-face version, experimenters explained the experiment and the possibility of leaving at any time to the participating children. Parents or experimenters helped children operate the device on which experiments ran. All adults were tested online.
+
+Three conditions were tested between-subject. In all conditions, video recordings of an experimenter demonstrated how a pair of words is used to refer to two visually identical balls lying on the table before her. The conditions were distinguished by which pair of words was used and by these words' meaning rule. In the first condition, the demonstrative condition, ``dies'' (German for ``this'') and ``das'' (German for ``that'') were used in their ordinary usage (see above). In the second condition, the pseudo-word demonstrative condition, the pseudo-words ``schmi'' and ``schmu'' were used with the meaning rule of demonstratives. In the third condition, the complex labelling condition, the same pseudo-words were used with a simpler meaning rule requiring only the temporary association of the word to a ball on one side of the table. The experimenter then expressed a preference for one of the balls, and during a still image, children were asked to click the preferred ball. The children observed the scene side-on (see Table \ref{fig:expsetup}). Three variables with two values each were counterbalanced for the trials, giving eight trials per condition. The trials varied in whether the experimenter started from the left or right side, whether she introduced ``schmi'' or ``schmu'' (``this'' or ``that'') first, and whether she asked for schmi or schmu (this or that) first. In the pseudo-word demonstrative condition, schmi was always the proximal object to match the phonetic properties of ``this'' versus ``that''.
+
+\subsection{Stimulus Material}\label{stimulus-material}
+
+In each trial, participants were presented with a series of brief video sequences in which an experimenter demonstrated the meaning of a pair of words (``schmi''/``schmu'' or ``this''/``that'') pointing at one of two identical-looking balls. The balls were placed symmetrically on a table, and the experimenter first demonstrated what she meant by each word from one side of the table and then from the other. The experimenter then changed sides again and said she would like to have schmi/schmu (this/that). Participants were then asked to click the ball the experimenter wanted to have (see Figure \ref{fig:expsetup}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{images/figure1_exp_setup} 
+
+}
+
+\caption{Schematic presentation of experimental setup in the three conditions. In the experiment, the sides (left/right) from which the experimenter started, the first demonstrated word (this/that, schmi/schmu), and the first word used in the request were counterbalanced between trials.}\label{fig:expsetup}
+\end{figure}
+
+\subsection{Coding}\label{coding}
+
+Understanding the substitution aspect of demonstratives requires understanding that the same object must be referred to using different words from different perspectives. Thus, an understanding of the substitution aspect of demonstratives is indicated by an ability to select the same ball in subsequent requests employing other words from different standpoints. Correspondingly, an understanding of ``schmi'' and ``schmu'' in the complex labelling condition requires being able to select different balls for subsequent requests employing other words. Thus, in all conditions, only when the target ball was successfully selected for both requests in a trial was it coded as a success. Participants' proportion of correct trials was used as an estimate of participants' proficiency in the task.
+
+For response strategy R1 (random choice), the mean of correct responses for individual requests and for trials was calculated for each participant.
+
+For response strategy R2, a proximity bias index was calculated for each child by subtracting the number of distal choices from the number of proximal choices and dividing the result by the number of requests. Because responses were forced-choice, the index ranges from -1 to 1. Positive values indicate a bias towards selecting the proximal ball. Negative values indicate a preference for the distal ball.
+
+For response strategy R3, an index for the mutual exclusivity bias was calculated for each child by subtracting the number of trials in which children chose the same ball twice from the number of trials in which they chose different balls and dividing the result by the number of trials. Thus, the index ranges from -1 to 1. Positive values indicate a bias towards treating the target words as mutually exclusive labels. Negative values indicate a tendency to apply both words to the same object.
+
+\subsection{Analyses}\label{analyses}
+
+Because the proportion of correct trials per participant was not normally distributed, hypotheses were tested using directed Wilcoxon rank sum tests instead of \emph{t}-tests. Response strategy R1 was tested using two-tailed Wilcoxon rank sum tests against chance. If children respond randomly to each request, they should choose each ball with an equal probability of 50\% in each request. Trials should correspondingly be answered correctly with a probability of 25\% because each trial consists of two requests which would be answered independently. Response strategies R2 and R3 were tested using two-tailed Wilcoxon rank sum tests against a neutral index of 0. All analyses were run in R (R Core Team, 2022) using the stats package for analyses and ggplot2 (Wickham, 2016) and ggsci (Xiao, 2023) for visualization. Data and manuscript were prepared using the tidyverse and papaja packages Wickham et al. (2019) and are available \href{https://anonymous.4open.science/r/understanding_demonstratives-67C0/}{online}.
+
+\section{Results}\label{results}
+
+\subsection{Overview}\label{overview}
+
+\begin{table}[ht]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:overviewtab}Overview of Performance in Test Trials}
+
+\footnotesize{
+
+\begin{tabular}{llllll}
+\toprule
+Age & \multicolumn{1}{c}{Condition} & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{trials/N} & \multicolumn{1}{c}{M} & \multicolumn{1}{c}{SD}\\
+\midrule
+Adult & Complex Labeling & 25 & 8.00 & 92.00 & 12.95\\
+Adult & Demonstrative & 24 & 8.00 & 86.98 & 23.16\\
+Adult & Pseudo-word Demonstrative & 25 & 8.00 & 75.00 & 36.80\\
+Child & Complex Labeling & 24 & 8.00 & 51.56 & 19.61\\
+Child & Demonstrative & 25 & 8.00 & 12.50 & 14.88\\
+Child & Pseudo-word Demonstrative & 24 & 8.00 & 15.10 & 29.94\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} The table provides the number of participants (N) for all experimental groups, as well as the percentage (M) and standard deviation (SD) of correct choices. Data for each child were averaged across trials.}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+Adults gave 92\% correct answers in the complex labelling condition, 86.98\% correct answers in the demonstrative condition, and 75\% correct answers in the pseudo-word demonstrative condition. This is interpreted as proficient performance in the presented task. Children performed less successfully in all conditions (complex labelling: 51.56\%; demonstrative: 12.50\%; pseudo-word demonstrative: 15.10\%) (see Table \ref{tab:overviewtab} and Figure \ref{fig:plotting1}).
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{images/figure2_proportioncorrect} 
+
+}
+
+\caption{Distribution of participants' percentage of correct trials per condition and age group}\label{fig:plotting1}
+\end{figure}
+
+\subsection{Hypotheses testing}\label{hypotheses-testing}
+
+\subsubsection{H1: Children perform significantly less accurately than adults in all conditions.}\label{h1-children-perform-significantly-less-accurately-than-adults-in-all-conditions.}
+
+Children perform significantly less accurately than adults in the complex labelling
+condition (\(W = 573.00\), \(p < .001\), \(\Delta \mathit{Mdn} = 0.38\), 95\% CI \([0.37, \infty]\)), in the pseudo-word demonstrative
+condition (\(W = 522.00\), \(p < .001\), \(\Delta \mathit{Mdn} = 0.87\), 95\% CI \([0.75, \infty]\)), as well as in
+the demonstrative condition (\(W = 579.50\), \(p < .001\), \(\Delta \mathit{Mdn} = 0.87\), 95\% CI \([0.75, \infty]\)). H1 could be confirmed.
+
+\subsubsection{H2: Children perform significantly more accurately in the demonstrative (dies/das) condition than in the pseudo-word demonstrative (schmi/schmu) condition.}\label{h2-children-perform-significantly-more-accurately-in-the-demonstrative-diesdas-condition-than-in-the-pseudo-word-demonstrative-schmischmu-condition.}
+
+Results revealed no significant difference between children's
+performance in the demonstrative and pseudo-word demonstrative condition
+(\(W = 355.00\), \(p = .114\), ). H2 could not be confirmed.
+
+\subsubsection{H3: Children perform significantly more accurately in the complex labelling condition than in both other conditions.}\label{h3-children-perform-significantly-more-accurately-in-the-complex-labelling-condition-than-in-both-other-conditions.}
+
+Directed Wilcoxon rank sum tests showed that responses were more accurate in the complex labeling than in the pseudo-word demonstrative condition (\(W = 490.50\), \(p < .001\), \(\Delta \mathit{Mdn} = 0.50\), 95\% CI \([0.37, \infty]\)) as well as in the complex labeling than in the demonstrative condition (\(W = 558.50\), \(p < .001\), \(\Delta \mathit{Mdn} = 0.38\), 95\% CI \([0.37, \infty]\)). H3 could be confirmed.
+
+\subsection{Response Strategies}\label{response-strategies}
+
+\subsubsection{R1: Random Choice}\label{r1-random-choice}
+
+\begin{table}[ht]
+
+\begin{center}
+\begin{threeparttable}
+
+\caption{\label{tab:randomchoicetab}Average probability of children's correct answers for first requests, second requests, and trials}
+
+\footnotesize{
+
+\begin{tabular}{llllll}
+\toprule
+Condition & \multicolumn{1}{c}{Response} & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{M} & \multicolumn{1}{c}{SD} & \multicolumn{1}{c}{p}\\
+\midrule
+Complex Labeling & correct\_first & 24 & 63.54 & 19.82 & .00541*\\
+Complex Labeling & correct\_second & 24 & 57.81 & 17.99 & .0583\\
+Demonstrative & correct\_first & 25 & 45.00 & 13.50 & .0848\\
+Demonstrative & correct\_second & 25 & 57.50 & 16.14 & .0334\\
+Pseudo-word Demonstrative & correct\_first & 24 & 49.48 & 21.33 & .937\\
+Pseudo-word Demonstrative & correct\_second & 24 & 55.21 & 23.58 & .309\\
+Complex Labeling & correct\_trial & 24 & 51.56 & 19.61 & <.001**\\
+Demonstrative & correct\_trial & 25 & 12.50 & 14.88 & .00301**\\
+Pseudo-word Demonstrative & correct\_trial & 24 & 15.10 & 29.94 & .0438\\
+\bottomrule
+\addlinespace
+\end{tabular}
+
+}
+
+\begin{tablenotes}[para]
+\normalsize{\textit{Note.} The table provides the number of participants (N) for all experimental groups, as well as the percentage (M) and standard deviation (SD) of correct choices. Two-sided Wilcoxon rank sum tests tested group-level performance against a chance-level of 50\% for individual requets and of 25\% for trials. The asterisks indicate significant effects (Bonferroni-corrected; trials: *p < .0167, **p < .0033, ***p < .00033; responses: *p < .0083, **p < .0017, ***p < .00017).}
+\end{tablenotes}
+
+\end{threeparttable}
+\end{center}
+
+\end{table}
+
+Table \ref{tab:randomchoicetab} shows the probabilities of responding correctly for each request and for trials. Two-sided Wilcoxon signed rank tests on children's responses to the first and second requests (Bonferroni-corrected \(\alpha\)-level of .05/6) suggest that children pick balls randomly in the demonstrative and pseudo-word demonstrative conditions because the probability of correct responses is not significantly different from a chance level of 50\% for all requests. In the complex labelling condition, children answer correctly significantly above chance to first requests. Moreover, children's trial performance significantly differs from chance in the complex labelling and demonstrative conditions (Bonferroni-corrected \(\alpha\)-level of .05/3). It is above chance for complex labelling (M = 45, p = .0848) and below chance in the demonstrative (M = 55.21, p = .309) condition. This suggests that children did not select balls randomly response-by-response in all conditions. In the complex labelling condition, children seem to understand the meaning of the novel words partly. In the demonstrative condition, the second response appears to be influenced by the first, even if first responses result from guessing, leading to below-chance performance.
+
+\subsubsection{R2: Proximity Bias}\label{r2-proximity-bias}
+
+Children were not overall biased towards choosing the ball closer to the speaker (complex labelling: M = -0.01, SD = 0.44, W = 124.50, p = .961; demonstrative condition (M = 0.26, SD = 0.53, W = 205.50, p = .0401; pseudo-word demonstrative: M = 0.05, SD = 0.50, W = 136.50, p = .472; two-sided Wilcoxon rank sum tests with Bonferroni-corrected \(\alpha\)-level of .05/3 against a proximity bias of 0).
+
+\begin{figure}
+\centering
+\includegraphics{images/figure3_proxibiasplot.png}
+\caption{\label{fig:proxibiasplot}Distribution of participants' proximity bias index; positive values indicate that participants selected the speaker-proximal ball more often than the distal ball, negative values indicate that participants more often select the distal ball}
+\end{figure}
+
+The distribution of index values suggests that individual children follow different strategies when selecting responses. Most children do not have a dominant preference for proximal or distal balls. Nevertheless, in each condition, some children always choose either the proximal or distal ball (see Figure \ref{fig:proxibiasplot}).
+
+\subsubsection{R3: Mutual Exclusivity Bias}\label{r3-mutual-exclusivity-bias}
+
+In the current setup, the mutual exclusivity bias is useful when interpreting ``schmi'' and ``schmu'' in the complex labelling condition. In this condition, each word corresponds to one ball at a certain position---irrespective of where the speaker stands. However, associating each word with one of the balls in this way is incompatible with the meaning of demonstratives.
+
+In most cases, children tend to select different balls within trials. The probability of selecting both balls in a trial significantly differs from chance in the complex labelling and demonstrative conditions, but not in the pseudo-word demonstrative condition (complex labelling: M = 0.64, SD = 0.43, W = 267, p = \textless.0001; demonstrative: M = 0.55, SD = 0.50, W = 296, p = .000302; pseudo-word demonstrative: M = 0.49, SD = 0.74, W = 253, p = .00263; two-sided Wilcoxon rank sum tests with Bonferroni-corrected \(\alpha\)-level of .05/3 against a mutual exclusivity bias of 0; see Figure \ref{fig:disjubiasplot}).
+
+\begin{figure}
+\centering
+\includegraphics{images/figure4_disjubiasplot.png}
+\caption{\label{fig:disjubiasplot}Distribution of participants' mutual exclusivity bias index; positive values indicate that participants switch selected balls between requests within one trial more often than not, negative values indicate that participants more often select the same ball twice; the size of dots represents participants' proportion of correct answers}
+\end{figure}
+
+The index values distribution suggests that most children tend to treat words as mutually exclusive labels. This tendency is strongest in the complex labelling condition, which is consistent with the meaning of labels. It is weakest and not significant in the pseudo-word demonstrative condition. However, many children exhibit an extreme mutual exclusivity bias in this condition (Median and Mode = 1), and some show a reversed tendency to select the same ball twice within a trial. The latter is consistent with the demonstrative meaning of ``schmi'' and ``schmu'' in this condition. Together with the distribution of correct answers showing that some children have high success rates in this condition (see Figure \ref{fig:plotting1}), this suggests that some children have understood the demonstrative meaning of ``schmi'' and ``schmu'' while others adher to treating the words as mutually exclusive labels.
+
+\section{Discussion}\label{discussion}
+
+\subsection{Response correctness rates}\label{response-correctness-rates}
+
+The results show that 5- to 7-year-old children perform less accurately than adults in all conditions. In particular, they have difficulties understanding spatial demonstratives (12.50\% correct trials) and pseudo-word spatial demonstratives (15.10\% correct trials). This corresponds to the expectations derived from extant findings on the acquisition of demonstratives (Clark \& Sengul, 1978; De Villiers \& De Villiers, 1974; González-Peña et al., 2020; Webb \& Abrahamson, 1976) and the theoretically derived complexity of demonstratives' substitution aspect (Hildebrandt \& Glauer, 2023; Hildebrandt et al., 2023; Tugendhat, 1976, 2016).
+
+The assumption that pseudo-word demonstratives are even more challenging to understand than ordinary demonstratives could not be confirmed for the tested age range. Using pseudo-words does not appear to make recognizing the substitution rule more difficult. As argued, this would be expected if children in that age range had already partially understood demonstratives, allowing them to answer some requests correctly that involve familiar demonstratives. Because correctness rates are similarly low in both conditions, we interpret these findings as showing that children aged 5 to 7 years not only lack a flexible understanding of the semantic substitution features of demonstratives but do not understand demonstrative substitution at all under tested conditions. The substitution rule of demonstratives appears to pose a major obstacle for learning demonstratives.
+
+As hypothesized, children perform significantly more accurately in the complex labelling condition than in both other conditions. Nonetheless, children answer correctly significantly less often than adults. We interpret these results as follows. In the case of complex labelling, children need not apply a substitution rule. The tendency to use one word per object when confronted with novel words (mutual exclusivity bias) suffices to perform correctly in the complex labelling condition. However, this condition differs from simple labelling---such as when children learn words for different kinds of animals: the labelled objects have the same superficial properties and differ only in their position in space. Moreover, no other differences were presented, like dispositional properties (magnetism, ability to emit sounds), ownership (my ball, Marie's ball), or specific histories that could have been used to mark each ball differentially. The lack of (easily observable or unobservable) distinguishing features complicates correct labelling. Therefore, children still find it more difficult than adults to understand requests in the complex labelling condition.
+
+Overall, 5- to 7-year-old German-speaking children do not appear to understand the meaning rule of demonstratives, nor do they apply a labelling rule to the full extent.
+
+\subsection{Children's response strategies}\label{childrens-response-strategies}
+
+The first analysis of children's responses suggests that children predominantly selected their first response randomly in the demonstrative and pseudo-word demonstrative conditions. In the complex labelling condition, first responses and trials were correct above chance, suggesting that children understood the presented labels at least in some cases and did not respond randomly. The second analysis shows that children did not tend to select the proximal ball. The third analysis revealed that children tended not to select the same ball twice within a trial in the complex labelling and demonstrative conditions. In the complex labelling condition, children selected the correct ball above chance in their first response and the other in their second response. This is compatible with the intended meaning of ``schmi'' and ``schmu'' as labels in this condition. While children appeared to follow the correct labelling rule in the complex labelling condition, their performance remained below the level of adults. As argued above, we take this to stem from the complexity involved in understanding that two distinct labels are used for two identical-looking objects.
+
+In the demonstrative condition, children chose their first response randomly and then adhered to selecting the other ball in response to the second request as well---which is not compatible with the contrastive meaning of demonstratives. This suggests that children did not interpret ``dies'' (``this'') and ``das'' (``that'') as demonstratives in these conditions and treated them as labels instead. In the pseudo-word demonstrative condition, children overall appeared to answer randomly. However, the distribution of individual biases shows that many children had a strong tendency to select both balls while some children had a clear tendency to select the same ball twice.
+
+Overall, the pattern of responses suggests that children had a strong tendency to follow a labelling rule when interpreting the meaning of novel (pseudo-)words, or even familiar words, as indicated by their mutual exclusivity bias. When words are not used as labels---as in the demonstrative and pseudo-word demonstrative conditions---children resort to guessing.
+
+\subsection{Children's understanding of demonstratives}\label{childrens-understanding-of-demonstratives}
+
+The current findings indicate that 5- to 7-year-old German-speaking children were below adult levels of accuracy when interpreting demonstratives, pseudo-word demonstratives, and complex labels in the present experimental setup. This shows that children have difficulties understanding demonstratives' substitution aspect and is in line with extant findings suggesting that the acquisition of demonstratives is the result of a protracted learning process that extends into the early elementary school years (Chu \& Minai, 2018; González-Peña et al., 2020; Shin \& Morford, 2020; Webb \& Abrahamson, 1976).
+
+Moreover, analyses of response strategies suggest that children responded randomly in their first response when interpreting ordinary demonstratives or pseudo-word demonstratives and that subsequent responses followed a rule adequate for learning labels such as classifying expressions or names. When confronted with two words and two objects, it is functional to assume that the two words are mutually exclusive, each labelling one thing. However, such a labelling rule is incompatible with the meaning of demonstratives. Understanding demonstratives consists in knowing that ``this'' is to be systematically substituted for ``that'' when referring to the same thing from different speaker positions (Tugendhat, 1976, 2016). This indicates that German-speaking children between 5 and 7 years of age do not fully understand demonstratives under tested conditions.
+
+Because mutual exclusivity is incompatible with the meaning of demonstratives, it is striking that children tend to interpret words as mutually exclusive labels even when used with a demonstrative meaning. In our interpretation, this indicates an underlying tendency to understand words as labels for things in one's environment. Such labels can be learned by associating words with (kinds of) objects. However, in the case of demonstratives, the substitution rule gives the only stable association, and it holds between words: demonstratives can refer to anything but must be systematically substituted for each other depending on the speakers' positions (Hildebrandt \& Glauer, 2023).
+
+\subsection{Limitations, Open Questions, and Further Research}\label{limitations-open-questions-and-further-research}
+
+Due to the restrictions during the COVID-19 pandemic, this study was planned to be conducted online. Therefore, the experimental stimuli had to be recorded and presented on screen. Videotaping stimuli, as opposed to live performance by experimenters, also had the advantage of controlling the stimuli fully. However, recorded scenes might be less engaging than interactions with an experimenter conducting the study. In particular, video-recorded verbal interactions might be less engaging than proper interactions with an experimenter, especially in the case of demonstratives, which usually serve to establish shared attention to a common referent in a shared environment, making it more difficult for children who have not yet reached a fully flexible understanding of demonstratives. Therefore, we recommend that future research on demonstratives employ live interactions with experimenters in the same room.
+
+In the current study, ``dies'' and ``das'' were used as distance-contrastive demonstratives without adding the locative adverbs ``hier'' and ``da'', although including ``hier'' and ``da'' might have been the natural choice given the widespread conviction that demonstratives lack a contrastive meaning in German. However, as argued above, German might be in the process of grammaticalization, developing a contrastive meaning of ``dies'' and ``das''. Adults' tendency to interpret ``dies'' and ``das'' contrastively under tested conditions suggests that ``dies'' and ``das'' are naturally interpreted in a distance-contrastive way. Irrespective of the present research questions, it would be worth investigating whether ``dies'' and ``das'' are used contrastively in German.
+
+Moreover, the current study suggests that German-speaking children between 5 and 7 years of age do not understand demonstratives. Participating children did not only have difficulties with the semantic feature of substitution but did not interpret demonstratives correctly, even in their first response. This suggests they did not understand demonstratives at all (see Section \emph{Overview}). As a result, the acquisition age of the substitution aspect of demonstratives' meaning could not be determined within this study. To determine how demonstratives are learned, the age range should be extended in a way corresponding to possible facilitations of the task associated with in-person testing. Moreover, different semantic features should be investigated separately (several items for context sensitivity, distance contrast, speaker-relativity, and substitution, see Section \emph{Theoretical Considerations}). Despite the above reasoning for using only one speaker (see Section \emph{This Study}), for completeness, the substitution aspect should also be tested with several speakers referring to the same thing from different positions.
+
+\subsection{Conclusion}\label{conclusion}
+
+The study suggests that German-speaking children between 5 and 7 years of age do not understand the substitution aspect of demonstratives. This means they do not understand that different words must be used to refer to the same thing from different positions, depending on speakers' relative distance to the referents. Instead, analyses of children's response patterns suggest that they tend to interpret words as mutually exclusive labels, even when used as demonstratives. These results complement findings showing that children acquire a comprehensive understanding of demonstratives rather late, focussing on the substitution aspect that is particularly crucial for demonstratives' meaning. That demonstratives are learned rather late is plausible at the outset, because the rules for using demonstratives are much more complex than for content words. While content words can be learned by associating words with featurally discriminable aspects of the environment, demonstratives require sensitivity to a more abstract similarity. Anything can be this or that. The referents of ``this'' and ``that'' have nothing in common except for their relative distance to whoever is speaking. The meaning of demonstratives is grounded in an initial understanding of distance as reachability together with a sensitivity to when one demonstrative (``this'' or ``that'') must be replaced by another (``that'' or ``this'').
+
+If the thesis is correct that children lack the ability to individuate objects before being able to use demonstratives adequately, and that only through learning demonstratives an abstract frame of reference is acquired, allowing proper object individuation (Hildebrandt \& Glauer, 2023; Hildebrandt et al., 2023), the current findings suggest that children between 5 and 7 years have not developed an adult-like spatial reference system that allows them to develop identity criteria for objects in the full sense.
+
+The current findings are relevant for a more comprehensive understanding of the acquisition of demonstratives, representing a special class of function words. The complexity of demonstratives' usage rules and children's tendency to use different words for different objects partly explains children's protracted learning of demonstratives, at the same time being among the first words used by L1-acquiring children and being used in an adult-like way only after several years. Further research will have to investigate the developmental acquisition order of all semantic aspects of demonstratives separately with children from a more extensive age range and in a more realistic setting to determine when and how demonstratives are learned by L1-acquiring children.
+
+\section{References}\label{references}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-shopen_deixis_1985}
+Anderson, S. R., \& Keenan, E. L. (1985). Deixis. In T. Shopen (Ed.), \emph{Language {Typology} and {Syntactic} {Description}: {Volume} 3} (Vol. 3, pp. 259--308). Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-R-papaja}
+Aust, F., \& Barth, M. (2022). \emph{{papaja}: {Prepare} reproducible {APA} journal articles with {R Markdown}}. Retrieved from \url{https://github.com/crsh/papaja}
+
+\bibitem[\citeproctext]{ref-buhler_sprachtheorie_1934}
+Bühler, K. (1934). \emph{Sprachtheorie: {Die} {Darstellungsfunktion} der {Sprache}}. Jena: Fischer.
+
+\bibitem[\citeproctext]{ref-chu_childrens_2018}
+Chu, C.-Y., \& Minai, U. (2018). Children's {Demonstrative} {Comprehension} and the {Role} of {Non}-linguistic {Cognitive} {Abilities}: {A} {Cross}-{Linguistic} {Study}. \emph{J Psycholinguist Res}, \emph{47}(6), 1343--1368. \url{https://doi.org/10.1007/s10936-018-9565-8}
+
+\bibitem[\citeproctext]{ref-clark_strategies_1978}
+Clark, E. V., \& Sengul, C. J. (1978). Strategies in the acquisition of deixis. \emph{J. Child Lang.}, \emph{5}(3), 457--475. \url{https://doi.org/10.1017/S0305000900002099}
+
+\bibitem[\citeproctext]{ref-coventry_language_2008}
+Coventry, K. R., Valdés, B., Castillo, A., \& Guijarro-Fuentes, P. (2008). Language within your reach: {Near}--far perceptual space and spatial demonstratives. \emph{Cognition}, \emph{108}(3), 889--895. \url{https://doi.org/10.1016/j.cognition.2008.06.010}
+
+\bibitem[\citeproctext]{ref-de_villiers_this_1974}
+De Villiers, P. A., \& De Villiers, J. G. (1974). On this, that, and the other: {Nonegocentrism} in very young children. \emph{Journal of Experimental Child Psychology}, \emph{18}(3), 438--447. \url{https://doi.org/10.1016/0022-0965(74)90122-2}
+
+\bibitem[\citeproctext]{ref-diessel_demonstratives_1999}
+Diessel, H. (1999). \emph{Demonstratives: Form, function and grammaticalization}. Amsterdam: Benjamins.
+
+\bibitem[\citeproctext]{ref-diessel_demonstratives_2006}
+Diessel, H. (2006). Demonstratives, joint attention, and the emergence of grammar. \emph{Cognitive Linguistics}, \emph{17}(4). \url{https://doi.org/10.1515/COG.2006.015}
+
+\bibitem[\citeproctext]{ref-diessel_distance_2013}
+Diessel, H. (2013). Distance {Contrasts} in {Demonstratives} (v2020.3). In M. S. Dryer \& M. Haspelmath (Eds.), \emph{The {World} {Atlas} of {Language} {Structures} {Online}}. Zenodo. \url{https://doi.org/10.5281/zenodo.7385533}
+
+\bibitem[\citeproctext]{ref-diessel_demonstratives_2014}
+Diessel, H. (2014). Demonstratives, {Frames} of {Reference}, and {Semantic} {Universals} of {Space}: {Demonstratives} and {Frames} of {Reference}. \emph{Language and Linguistics Compass}, \emph{8}(3), 116--132. \url{https://doi.org/10.1111/lnc3.12066}
+
+\bibitem[\citeproctext]{ref-diessel_typology_2020}
+Diessel, H., \& Breunesse, M. (2020). \emph{A typology of demonstrative clause linkers}. {[}object Object{]}. \url{https://doi.org/10.5281/ZENODO.4055834}
+
+\bibitem[\citeproctext]{ref-diessel_demonstratives_2020}
+Diessel, H., \& Coventry, K. R. (2020). Demonstratives in {Spatial} {Language} and {Social} {Interaction}: {An} {Interdisciplinary} {Review}. \emph{Front. Psychol.}, \emph{11}, 555265. \url{https://doi.org/10.3389/fpsyg.2020.555265}
+
+\bibitem[\citeproctext]{ref-gonzalez-pena_extended_2022}
+González-Peña, P., Coventry, K. R., Bayliss, A. P., \& Doherty, M. J. (2022). The extended development of mapping spatial demonstratives onto space. \emph{Journal of Experimental Child Psychology}, \emph{215}, 105336. \url{https://doi.org/10.1016/j.jecp.2021.105336}
+
+\bibitem[\citeproctext]{ref-gonzalez-pena_acquisition_2020}
+González-Peña, P., Doherty, M. J., \& Guijarro-Fuentes, P. (2020). Acquisition of {Demonstratives} in {English} and {Spanish}. \emph{Front. Psychol.}, \emph{11}, 1778. \url{https://doi.org/10.3389/fpsyg.2020.01778}
+
+\bibitem[\citeproctext]{ref-halberda_development_2003}
+Halberda, Justin. (2003). The development of a word-learning strategy. \emph{Cognition}, \emph{87}(1), B23--B34. \url{https://doi.org/10.1016/S0010-0277(02)00186-5}
+
+\bibitem[\citeproctext]{ref-halberda_is_2006}
+Halberda, J. (2006). Is this a dax which {I} see before me? {Use} of the logical argument disjunctive syllogism supports word-learning in children and adults. \emph{Cognitive Psychology}, \emph{53}(4), 310--344. \url{https://doi.org/10.1016/j.cogpsych.2006.04.003}
+
+\bibitem[\citeproctext]{ref-hildebrandt_becoming_2023}
+Hildebrandt, F., \& Glauer, R. (2023). Becoming episodic: {The} {Development} of {Objectivity}. \emph{Philosophical Psychology}, 1--24. \url{https://doi.org/10.1080/09515089.2023.2181152}
+
+\bibitem[\citeproctext]{ref-hildebrandt_rethinking_2023}
+Hildebrandt, F., Glauer, R., \& Moore, R. (2023). Rethinking how children individuate objects: Spatial indexicals in early development. \emph{Synthese}, \emph{202}(3), 75. \url{https://doi.org/10.1007/s11229-023-04300-5}
+
+\bibitem[\citeproctext]{ref-himmelmann_deiktikon_1997}
+Himmelmann, N. P. (1997). \emph{Deiktikon, {Artikel}, {Nominalphrase}. {Zur} {Emergenz} syntaktischer {Struktur}}. Berlin, Boston: Max Niemeyer Verlag. \url{https://doi.org/doi:10.1515/9783110929621}
+
+\bibitem[\citeproctext]{ref-kita_pointing_2003}
+Kita, S. (2003). \emph{Pointing: {Where} {Language}, {Culture}, and {Cognition} {Meet}}. Psychology Press.
+
+\bibitem[\citeproctext]{ref-kuntay_learning_2006}
+Küntay, A. C., \& Özyürek, A. (2006). Learning to use demonstratives in conversation: What do language specific strategies in {Turkish} reveal? \emph{J. Child Lang.}, \emph{33}(2), 303--320. \url{https://doi.org/10.1017/S0305000906007380}
+
+\bibitem[\citeproctext]{ref-levinson_space_2003}
+Levinson, S. C. (2003). \emph{Space in {Language} and {Cognition}: {Explorations} in {Cognitive} {Diversity}}. Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-levinson_demonstratives_2018}
+Levinson, S. C., Cutfield, S., Dunn, M., Enfield, N., \& Meira, S. (Eds.). (2018). \emph{Demonstratives in {Cross}-{Linguistic} {Perspective}}. Cambridge University Press. Retrieved from \url{https://www.doi.org/10.1017/9781108333818}
+
+\bibitem[\citeproctext]{ref-markman_use_2003}
+Markman, E. M., Wasow, J. L., \& Hansen, M. B. (2003). Use of the mutual exclusivity assumption by young word learners. \emph{Cognitive Psychology}, \emph{47}(3), 241--275. \url{https://doi.org/10.1016/S0010-0285(03)00034-3}
+
+\bibitem[\citeproctext]{ref-merriman_mutual_1989}
+Merriman, W. E., Bowman, L. L., \& MacWhinney, B. (1989). The {Mutual} {Exclusivity} {Bias} in {Children}'s {Word} {Learning}. \emph{Monographs of the Society for Research in Child Development}, \emph{54}(3/4), i. \url{https://doi.org/10.2307/1166130}
+
+\bibitem[\citeproctext]{ref-peeters_conceptual_2021}
+Peeters, D., Krahmer, E., \& Maes, A. (2021). A conceptual framework for the study of demonstrative reference. \emph{Psychon Bull Rev}, \emph{28}(2), 409--433. \url{https://doi.org/10.3758/s13423-020-01822-8}
+
+\bibitem[\citeproctext]{ref-peeters_this_2016}
+Peeters, D., \& Özyürek, A. (2016). This and {That} {Revisited}: {A} {Social} and {Multimodal} {Approach} to {Spatial} {Demonstratives}. \emph{Front. Psychol.}, \emph{7}. \url{https://doi.org/10.3389/fpsyg.2016.00222}
+
+\bibitem[\citeproctext]{ref-R-base}
+R Core Team. (2022). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
+
+\bibitem[\citeproctext]{ref-shin_demonstratives_2020}
+Shin, N., \& Morford, J. (2020). \emph{Demonstratives in {Spanish}: {Children}'s developing conceptualization of interactive space}. \url{https://doi.org/10.4324/9781003091790-18}
+
+\bibitem[\citeproctext]{ref-coventry_spatial_2023}
+Spatial communication systems across languages reflect universal action constraints. (2023). \emph{Nat Hum Behav}. \url{https://doi.org/10.1038/s41562-023-01697-4}
+
+\bibitem[\citeproctext]{ref-stavans_catastrophic_2019}
+Stavans, M., Lin, Y., Wu, D., \& Baillargeon, R. (2019). Catastrophic individuation failures in infancy: {A} new model and predictions. \emph{Psychological Review}, \emph{126}(2), 196--225. \url{https://doi.org/10.1037/rev0000136}
+
+\bibitem[\citeproctext]{ref-tanz_studies_1980}
+Tanz, C. (1980). \emph{Studies in the acquisition of deictic terms}. Cambridge {[}Eng.{]} ; New York: Cambridge University Press.
+
+\bibitem[\citeproctext]{ref-tugendhat_vorlesungen_1976}
+Tugendhat, E. (1976). \emph{Vorlesungen zur {Einf{ü}hrung} in die sprachanalytische {Philosophie}} (1. Aufl). Frankfurt am Main: Suhrkamp.
+
+\bibitem[\citeproctext]{ref-tugendhat_traditional_2016}
+Tugendhat, E. (2016). \emph{Traditional and {Analytical} {Philosophy}: {Lectures} on the {Philosophy} of {Language}} (P. A. Gorner, Trans.). Cambridge: Cambridge University Press. \url{https://doi.org/10.1017/CBO9781316535608}
+
+\bibitem[\citeproctext]{ref-van_de_walle_bases_2000}
+Van de Walle, G. A., Carey, S., \& Prevor, M. (2000). Bases for {Object} {Individuation} in {Infancy}: {Evidence} {From} {Manual} {Search}. \emph{Journal of Cognition and Development}, \emph{1}(3), 249--280. \url{https://doi.org/10.1207/S15327647JCD0103_1}
+
+\bibitem[\citeproctext]{ref-webb_stages_1976}
+Webb, P. A., \& Abrahamson, A. A. (1976). Stages of egocentrism in children's use of {`` \emph{this} ''} and {`` \emph{that} ''}: A different point of view. \emph{J. Child Lang.}, \emph{3}(3), 349--367. \url{https://doi.org/10.1017/S0305000900007236}
+
+\bibitem[\citeproctext]{ref-R-ggplot2}
+Wickham, H. (2016). \emph{ggplot2: Elegant graphics for data analysis}. Springer-Verlag New York. Retrieved from \url{https://ggplot2.tidyverse.org}
+
+\bibitem[\citeproctext]{ref-R-tidyverse}
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., \ldots{} Yutani, H. (2019). Welcome to the {tidyverse}. \emph{Journal of Open Source Software}, \emph{4}(43), 1686. \url{https://doi.org/10.21105/joss.01686}
+
+\bibitem[\citeproctext]{ref-wierzbicka_semantics_1996}
+Wierzbicka, A. (1996). \emph{Semantics: Primes and universals}. Oxford {[}England{]} ; New York: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-R-ggsci}
+Xiao, N. (2023). \emph{Ggsci: Scientific journal and sci-fi themed color palettes for 'ggplot2'}. Retrieved from \url{https://CRAN.R-project.org/package=ggsci}
+
+\bibitem[\citeproctext]{ref-xu_infants_1996}
+Xu, F., \& Carey, S. (1996). Infants' {Metaphysics}: {The} {Case} of {Numerical} {Identity}. \emph{Cognitive Psychology}, \emph{30}(2), 111--153. \url{https://doi.org/10.1006/cogp.1996.0005}
+
+\end{CSLReferences}
+
+\endgroup
+
+
+\end{document}
